@@ -22,6 +22,8 @@ dotenv.config()
 connection.connect(err=>{
     if(err){
         console.log("error while coonecting",err)
+        setTimeout(handleDisconnect, 2000); // Retry after 2 seconds
+
     }
     console.log("database connected")
 })
