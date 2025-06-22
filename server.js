@@ -10,40 +10,33 @@ const fs = require('fs');
 const cors=require('cors')
 const dotenv=require("dotenv")
 dotenv.config()
-function handleDisconnect() {
-  const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 3306,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-  });
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
-  connection.connect(err => {
-    if (err) {
-      console.error("❌ Error while connecting:", err);
-      setTimeout(handleDisconnect, 2000); // ✅ Retry after 2s
-    } else {
-      console.log("✅ Database connected");
-    }
-  });
+module.exports = pool.promise();
 
-  connection.on("error", err => {
-    console.error("⚠️ DB error", err);
-    if (err.code === "PROTOCOL_CONNECTION_LOST" || err.code === "ETIMEDOUT") {
-      handleDisconnect(); // ✅ Reconnect
-    } else {
-      throw err;
-    }
-  });
-}
-
-handleDisconnect(); // 🔁 Start the loop
 app.use(express.json())
 app.use(cors())
 app.listen(port,()=>{
     console.log(`Server running under ${port}`)
 })
+const db = require('./your-db-file');
+
+db.query('SELECT * FROM products')
+  .then(([rows]) => {
+    console.log(rows);
+  })
+  .catch(err => {
+    console.error('Query error:', err);
+  });
 app.post('/products',upload.array('images'),(req,res)=>
     {
         const {product_name,product_price,descripition}=req.body;
