@@ -24,6 +24,7 @@ const pool = mysql.createPool({
 
 module.exports = pool.promise();
 
+
 app.use(express.json())
 app.use(cors())
 app.listen(port,()=>{
