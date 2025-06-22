@@ -29,7 +29,7 @@ app.use(cors())
 app.listen(port,()=>{
     console.log(`Server running under ${port}`)
 })
-const db = require('./your-db-file');
+
 
 db.query('SELECT * FROM products')
   .then(([rows]) => {
