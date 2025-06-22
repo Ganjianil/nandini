@@ -11,6 +11,17 @@ const cors=require('cors')
 const dotenv=require("dotenv")
 const db = require('./db');
 dotenv.config()
+async function testQuery() {
+  try {
+    const [rows] = await db.query('SELECT * FROM products');
+    console.log(rows);
+  } catch (err) {
+    console.error('Query error:', err);
+  }
+}
+
+testQuery();
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT || 3306,
