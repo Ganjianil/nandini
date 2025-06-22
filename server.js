@@ -9,6 +9,7 @@ const easyinvoice = require('easyinvoice');
 const fs = require('fs');
 const cors=require('cors')
 const dotenv=require("dotenv")
+const db = require('./db');
 dotenv.config()
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
