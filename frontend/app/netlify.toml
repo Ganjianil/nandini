@@ -1,7 +1,4 @@
 [build]
-  base = "frontend"
+  base = "frontend/app"
   publish = "dist"
   command = "npm run build"
-
-[context.production]
-  branch = "main" # Or "master" depending on your default GitHub branch
