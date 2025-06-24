@@ -1,6 +1,6 @@
 const express= require("express")
 const app=express();
-const port =8085
+const port = process.env.PORT || 8085;
 const mysql= require("mysql2")
 const multer= require("multer")
 const upload=multer({dest:'upload/'})
