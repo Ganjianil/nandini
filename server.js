@@ -53,7 +53,7 @@ db.query('SELECT * FROM products')
   
   app.get("/",(req,res)=>{
     res.send("welcome to website");
-    }
+    )}
 app.post('/products',upload.array('images'),(req,res)=>
     {
         const {product_name,product_price,descripition}=req.body;
