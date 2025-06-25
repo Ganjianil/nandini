@@ -54,7 +54,7 @@ const AllProducts = ({ isAuthenticated, setCartItems }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:10406/viewproducts");
+      const response = await axios.get("https://nandini-1-io4g.onrender.com/viewproducts");
       setAllProducts(response.data);
       setFilteredProducts(response.data);
       setLoading(false);
@@ -73,7 +73,7 @@ const AllProducts = ({ isAuthenticated, setCartItems }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:10406/cart",
+        "https://nandini-1-io4g.onrender.com/cart",
         { product_id: [productId] },
         {
           headers: {
@@ -92,7 +92,7 @@ const AllProducts = ({ isAuthenticated, setCartItems }) => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:10406/viewcart", {
+      const response = await axios.get("https://nandini-1-io4g.onrender.com/viewcart", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -242,7 +242,7 @@ const AllProducts = ({ isAuthenticated, setCartItems }) => {
                   <div className="product-image">
                     {product.image_path ? (
                       <img
-                        src={`http://localhost:10406/${product.image_path}`}
+                        src={`https://nandini-1-io4g.onrender.com/${product.image_path}`}
                         alt={product.product_name}
                       />
                     ) : (
