@@ -16,7 +16,7 @@ const Orders = ({ isAuthenticated }) => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:10406/myorders", {
+      const response = await axios.get("https://nandini-1-io4g.onrender.com/myorders", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
