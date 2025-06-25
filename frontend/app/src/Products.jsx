@@ -13,7 +13,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:8085/viewproducts");
+      const response = await axios.get("http://localhost:10406/viewproducts");
       // Show only first 10 products on homepage
       setProducts(response.data.slice(0, 10));
       setLoading(false);
@@ -32,7 +32,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:8085/cart",
+        "http://localhost:10406/cart",
         { product_id: [productId] },
         {
           headers: {
@@ -51,7 +51,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8085/viewcart", {
+      const response = await axios.get("http://localhost:10406/viewcart", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,7 +76,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
               <div className="product-image">
                 {product.image_path ? (
                   <img
-                    src={`http://localhost:8085/${product.image_path}`}
+                    src={`http://localhost:10406/${product.image_path}`}
                     alt={product.product_name}
                   />
                 ) : (
