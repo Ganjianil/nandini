@@ -39,7 +39,7 @@ const AddProduct = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:10406/products",
+        "https://nandini-1-io4g.onrender.com/products",
         formDataToSend,
         {
           headers: {
