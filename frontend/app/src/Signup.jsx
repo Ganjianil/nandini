@@ -30,7 +30,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:10406/signup", {
+      await axios.post("http://https://nandini-1-io4g.onrender.com/signup", {
         username: formData.username,
         password: formData.password,
       });
