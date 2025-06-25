@@ -25,7 +25,7 @@ const Cart = ({ isAuthenticated, cartItems, setCartItems }) => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8085/viewcart", {
+      const response = await axios.get("http://localhost:10406/viewcart", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -81,7 +81,7 @@ const Cart = ({ isAuthenticated, cartItems, setCartItems }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:8085/checkout",
+        "http://localhost:10406/checkout",
         {
           address: addressForm,
         },
