@@ -50,6 +50,10 @@ db.query('SELECT * FROM products')
   .catch(err => {
     console.error('Query error:', err);
   });
+  
+  app.get("/",(req,res)={
+    res.send("welcome to website");
+    }
 app.post('/products',upload.array('images'),(req,res)=>
     {
         const {product_name,product_price,descripition}=req.body;
