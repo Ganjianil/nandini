@@ -13,7 +13,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://nandhinibrass.netlify.app/viewproducts");
+      const response = await axios.get("https://nandini-1-io4g.onrender.com/viewproducts");
       // Show only first 10 products on homepage
       setProducts(response.data.slice(0, 10));
       setLoading(false);
@@ -32,7 +32,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "https://nandhinibrass.netlify.app/cart",
+        "https://nandini-1-io4g.onrender.com/cart",
         { product_id: [productId] },
         {
           headers: {
@@ -51,7 +51,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("https://nandhinibrass.netlify.app/viewcart", {
+      const response = await axios.get("https://nandini-1-io4g.onrender.com/viewcart", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,7 +76,7 @@ const Products = ({ isAuthenticated, setCartItems }) => {
               <div className="product-image">
                 {product.image_path ? (
                   <img
-                    src={`https://nandhinibrass.netlify.app/${product.image_path}`}
+                    src={`https://nandini-1-io4g.onrender.com/${product.image_path}`}
                     alt={product.product_name}
                   />
                 ) : (
