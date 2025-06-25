@@ -13,7 +13,7 @@ const ManageProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:8085/viewproducts");
+      const response = await axios.get("http://localhost:10406/viewproducts");
       setProducts(response.data);
       setLoading(false);
     } catch (error) {
@@ -25,7 +25,7 @@ const ManageProducts = () => {
   const deleteProduct = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`http://localhost:8085/deleteproducts/${productId}`);
+        await axios.delete(`http://localhost:10406/deleteproducts/${productId}`);
         setMessage("Product deleted successfully!");
         fetchProducts(); // Refresh the list
       } catch (error) {
@@ -42,7 +42,7 @@ const ManageProducts = () => {
       )
     ) {
       try {
-        await axios.delete("http://localhost:8085/deleteallproducts");
+        await axios.delete("http://localhost:10406/deleteallproducts");
         setMessage("All products deleted successfully!");
         fetchProducts(); // Refresh the list
       } catch (error) {
@@ -95,7 +95,7 @@ const ManageProducts = () => {
                   <td>
                     {product.image_path ? (
                       <img
-                        src={`http://localhost:8085/${product.image_path}`}
+                        src={`http://localhost:10406/${product.image_path}`}
                         alt={product.product_name}
                         className="product-thumbnail"
                       />
