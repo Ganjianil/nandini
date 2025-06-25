@@ -30,7 +30,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:8085/signup", {
+      await axios.post("http://localhost:10406/signup", {
         username: formData.username,
         password: formData.password,
       });
