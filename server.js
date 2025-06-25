@@ -29,7 +29,7 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   waitForConnections: true,
-  connectionLimit: 10,
+  dbLimit: 10,
   queueLimit: 0
 });
 
@@ -57,14 +57,14 @@ db.query('SELECT * FROM products')
 app.post('/products',upload.array('images'),(req,res)=>
     {
         const {product_name,product_price,descripition}=req.body;
-        connection.query(`insert into products (product_name,product_price,descripition) values (?,?,?)`,[product_name,product_price,descripition],(err,result)=>{
+        db.query(`insert into products (product_name,product_price,descripition) values (?,?,?)`,[product_name,product_price,descripition],(err,result)=>{
             if(err){
                 return res.status(500).send(err)
             }
             else{
                 const product_id=result.insertId
                 const imageinsert=req.files.map(file=>[product_id,file.path])
-                connection.query(`Insert into product_img(product_id,image_path) values ?`,[imageinsert],(err2)=>{
+                db.query(`Insert into product_img(product_id,image_path) values ?`,[imageinsert],(err2)=>{
                     if(err2)
                        return res.status(500).send(err2)
                       res.send('products with images saved sucessfully')
@@ -77,7 +77,7 @@ app.post('/products',upload.array('images'),(req,res)=>
 
 })
 app.get('/viewproducts', (req, res) => {
-  connection.query(
+  db.query(
     `SELECT products.*, product_img.image_path 
      FROM products 
      JOIN product_img ON products.id = product_img.product_id`,
@@ -89,10 +89,10 @@ app.get('/viewproducts', (req, res) => {
 });
 app.delete('/deleteproducts/:id',(req,res)=>{
     const product_id=req.params.id
-    connection.query(`delete from product_img where id=?`,[product_id],(err)=>{
+    db.query(`delete from product_img where id=?`,[product_id],(err)=>{
         if(err)
             return res.status(500).send(err)
-        connection.query(`delete from products where id=?`,[product_id],(err,result)=>{
+        db.query(`delete from products where id=?`,[product_id],(err,result)=>{
         if(err)
             return res.status(500).send(err)
         if(result.affectedRows===0){
@@ -104,11 +104,11 @@ app.delete('/deleteproducts/:id',(req,res)=>{
 })
 app.delete('/deleteallproducts', (req, res) => {
   // First delete all images
-  connection.query('DELETE FROM product_img', (err1) => {
+  db.query('DELETE FROM product_img', (err1) => {
     if (err1) return res.status(500).send(err1);
 
     // Then delete all products
-    connection.query('DELETE FROM products', (err2, result) => {
+    db.query('DELETE FROM products', (err2, result) => {
       if (err2) return res.status(500).send(err2);
 
       res.send('All products and their images deleted successfully');
@@ -125,7 +125,7 @@ app.post('/cart', verifyToken, (req, res) => {
 
   const values = product_id.map(pid => [user_id, pid]);
 
-  connection.query(
+  db.query(
     'INSERT INTO cart (user_id, product_id) VALUES ?',
     [values],
     (err) => {
@@ -144,7 +144,7 @@ app.get('/viewcart', verifyToken, (req, res) => {
     WHERE c.user_id = ?
   `;
 
-  connection.query(query, [userId], (err, results) => {
+  db.query(query, [userId], (err, results) => {
     if (err) return res.status(500).send(err);
     res.json(results);
   });
@@ -152,7 +152,7 @@ app.get('/viewcart', verifyToken, (req, res) => {
 app.delete('/cart/user/:user_id', (req, res) => {
   const userId = req.params.user_id;
 
-  connection.query('DELETE FROM cart WHERE user_id = ?', [userId], (err, result) => {
+  db.query('DELETE FROM cart WHERE user_id = ?', [userId], (err, result) => {
     if (err) return res.status(500).send(err);
 
     if (result.affectedRows === 0) {
@@ -168,7 +168,7 @@ app.post('/signup', async (req, res) => {
   const { username, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
 
-  connection.query(
+  db.query(
     'INSERT INTO users (username, password) VALUES (?, ?)',
     [username, hashed],
     (err) => {
@@ -182,7 +182,7 @@ const SECRET = 'your_secret_key'; // store this securely
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  connection.query(
+  db.query(
     'SELECT * FROM users WHERE username = ?',
     [username],
     async (err, results) => {
@@ -231,7 +231,7 @@ app.post('/checkout', verifyToken, (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  connection.query(
+  db.query(
     insertOrderQuery,
     [
       userId,
@@ -256,21 +256,21 @@ app.post('/checkout', verifyToken, (req, res) => {
         WHERE c.user_id = ?
       `;
 
-      connection.query(cartQuery, [userId], (err, cartItems) => {
+      db.query(cartQuery, [userId], (err, cartItems) => {
         if (err) return res.status(500).send(err);
         if (cartItems.length === 0) return res.status(400).send('Cart is empty');
 
         const orderItems = cartItems.map(item => [orderId, item.product_id]);
 
         // Step 3: Insert into order_items
-        connection.query(
+        db.query(
           'INSERT INTO order_items (order_id, product_id) VALUES ?',
           [orderItems],
           (err) => {
             if (err) return res.status(500).send(err);
 
             // Step 4: Clear cart
-            connection.query('DELETE FROM cart WHERE user_id = ?', [userId], (err) => {
+            db.query('DELETE FROM cart WHERE user_id = ?', [userId], (err) => {
               if (err) return res.status(500).send(err);
 
               // Step 5: Prepare invoice (PDF/email optional)
@@ -325,7 +325,7 @@ app.get('/myorders', verifyToken, (req, res) => {
     ORDER BY o.order_date DESC
   `;
 
-  connection.query(query, [userId], (err, results) => {
+  db.query(query, [userId], (err, results) => {
     if (err) return res.status(500).send(err);
     res.json(results);
   });
@@ -346,7 +346,7 @@ app.get('/admin/orders', (req, res) => {
     ORDER BY o.order_date DESC
   `;
 
-  connection.query(query, (err, results) => {
+  db.query(query, (err, results) => {
     if (err) return res.status(500).send(err);
     res.json(results);
   });
@@ -360,7 +360,7 @@ app.put('/order/:order_id/status', (req, res) => {
     return res.status(400).send('Invalid status value');
   }
 
-  connection.query(
+  db.query(
     'UPDATE orders SET status = ? WHERE id = ?',
     [status, orderId],
     (err, result) => {
