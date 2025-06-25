@@ -39,8 +39,8 @@ module.exports = pool.promise();
 
 app.use(express.json());
 app.use(cors({
-    origin: 'https://nandhinibrass.netlify.app' // Allow your frontend origin
-})));
+    origin: 'https://nandhinibrass.netlify.app'
+}));
 app.use('/upload', express.static('upload'));
 
 app.listen(port, () => {
