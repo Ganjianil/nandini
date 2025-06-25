@@ -25,7 +25,7 @@ const Cart = ({ isAuthenticated, cartItems, setCartItems }) => {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:10406/viewcart", {
+      const response = await axios.get("https://nandini-1-io4g.onrender.com/viewcart", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -81,7 +81,7 @@ const Cart = ({ isAuthenticated, cartItems, setCartItems }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:10406/checkout",
+        "https://nandini-1-io4g.onrender.com/checkout",
         {
           address: addressForm,
         },
