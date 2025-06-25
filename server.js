@@ -51,7 +51,7 @@ db.query('SELECT * FROM products')
     console.error('Query error:', err);
   });
   
-  app.get("/",(req,res)={
+  app.get("/",(req,res)=>{
     res.send("welcome to website");
     }
 app.post('/products',upload.array('images'),(req,res)=>
