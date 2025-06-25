@@ -38,7 +38,9 @@ const pool = mysql.createPool({
 module.exports = pool.promise();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'https://nandhinibrass.netlify.app' // Allow your frontend origin
+})));
 app.use('/upload', express.static('upload'));
 
 app.listen(port, () => {
